@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	r := handlers.Router()
+	r := handlers.SetupRouter()
 	err := r.Run(":8085")
 	if err != nil {
 		log.Panicln("Cannot spawn server")

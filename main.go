@@ -1,13 +1,17 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"log"
+
+	"github.com/tanggalnya/queue-actor/internal/handlers"
+)
 
 func main() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	r.Run()
+	r := handlers.Router()
+	err := r.Run(":8085")
+	if err != nil {
+		log.Panicln("Cannot spawn server")
+
+		return
+	}
 }

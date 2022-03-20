@@ -19,7 +19,7 @@ func Test_publisherClient_PublishEvent(t *testing.T) {
 		{
 			"success publish event",
 			fields{
-				QueueName: "",
+				QueueName: "test",
 				Reliable:  false,
 			},
 			args{body: "test"},
@@ -29,6 +29,7 @@ func Test_publisherClient_PublishEvent(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p := publisherClient{
+				uri:       "amqp://guest:guest@localhost",
 				queueName: tt.fields.QueueName,
 				reliable:  tt.fields.Reliable,
 			}

@@ -4,7 +4,9 @@ go 1.17
 
 require (
 	github.com/gin-gonic/gin v1.7.7
+	github.com/rabbitmq/amqp091-go v1.3.0
 	github.com/stretchr/testify v1.7.0
+	github.com/wagslane/go-rabbitmq v0.7.1
 )
 
 require (
@@ -21,6 +23,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/stretchr/objx v0.1.0 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect

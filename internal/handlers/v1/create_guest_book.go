@@ -6,8 +6,12 @@ import (
 )
 
 func createGuestBook(c *gin.Context) {
-	cfg := message_queue.Config{Uri: "http://fillme"} //TODO: change this
-	_ = message_queue.NewPublishEvent(cfg)            //TODO: change this
+	cfg := message_queue.Config{Uri: "amqp://guest:guest@localhost"} //TODO: change this
+	publisher := message_queue.NewPublishEvent(cfg)
+	err := publisher.PublishEvent("events payload") //TODO: change this
+	if err != nil {
+		return
+	}
 
 	c.JSON(200, gin.H{
 		"success": "true",

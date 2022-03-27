@@ -12,11 +12,15 @@ We use https://github.com/wagslane/go-rabbitmq
    ```sh
    docker start rabbitmq 
    ```
-2. Start app
+2. Build
    ```shell
-   go run main.app
+   make build   
    ```
-3. Start worker
+4. Start server
    ```shell
-   go run worker
+   ./out/queue-actor server
+   ```
+5. Start worker
+   ```shell
+   ./out/queue-actor worker
    ```

@@ -2,12 +2,16 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/tanggalnya/queue-actor/internal/services/message_queue"
+	"github.com/tanggalnya/queue-actor/internal/services/message_queue/publisher"
 )
 
 func createGuestBook(c *gin.Context) {
-	cfg := message_queue.Config{Uri: "http://fillme"} //TODO: change this
-	_ = message_queue.NewPublishEvent(cfg)            //TODO: change this
+	cfg := publisher.Config{Uri: "amqp://guest:guest@localhost"} //TODO: change this
+	publisher := publisher.NewPublishEvent(cfg)
+	err := publisher.PublishEvent("events payload") //TODO: change this
+	if err != nil {
+		return
+	}
 
 	c.JSON(200, gin.H{
 		"success": "true",

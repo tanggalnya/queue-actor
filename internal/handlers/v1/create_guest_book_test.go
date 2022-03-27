@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"github.com/tanggalnya/queue-actor/internal/services/message_queue/publisher/mocks"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -8,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/tanggalnya/queue-actor/internal/services/message_queue/mocks"
 )
 
 func TestCreateGuestBookRoute(t *testing.T) {

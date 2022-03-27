@@ -1,6 +1,7 @@
-package message_queue
+package publisher
 
 import (
+	"github.com/tanggalnya/queue-actor/internal/services/message_queue"
 	"log"
 
 	"github.com/rabbitmq/amqp091-go"
@@ -38,7 +39,7 @@ func (p publisherClient) PublishEvent(message string) error {
 	return nil
 }
 
-func NewPublishEvent(cfg Config) MessageQueue {
+func NewPublishEvent(cfg Config) message_queue.Publisher {
 	return &publisherClient{
 		uri:       cfg.Uri,
 		queueName: cfg.QueueName,

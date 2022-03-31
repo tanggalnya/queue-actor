@@ -8,7 +8,9 @@ import (
 	"syscall"
 
 	amqp "github.com/rabbitmq/amqp091-go"
+	"github.com/tanggalnya/queue-actor/internal/domain"
 	"github.com/tanggalnya/queue-actor/internal/services/message_queue"
+	"github.com/tanggalnya/queue-actor/internal/services/message_queue/subscriber/processors/event_triggers"
 	"github.com/wagslane/go-rabbitmq"
 )
 
@@ -26,6 +28,7 @@ type subscriberClient struct {
 	exchangeKind string
 	consumerName string
 	queueName    string
+	processor    event_triggers.Factory
 }
 
 func (s subscriberClient) Consume() error {
@@ -42,6 +45,13 @@ func (s subscriberClient) Consume() error {
 	err = consumer.StartConsuming(func(d rabbitmq.Delivery) rabbitmq.Action {
 		log.Printf("consumed: %v", string(d.Body))
 		// rabbitmq.Ack, rabbitmq.NackDiscard, rabbitmq.NackRequeue
+
+		pr := s.processor.NewProcessor(domain.EventTables.GuestBook) //TODO: change this
+		err := pr.Insert()
+		if err != nil {
+			return 0
+		}
+
 		return rabbitmq.Ack
 	}, s.queueName, []string{"routing_key", "routing_key_2"}, rabbitmq.WithConsumeOptionsConcurrency(10), rabbitmq.WithConsumeOptionsQueueDurable, rabbitmq.WithConsumeOptionsQuorum, rabbitmq.WithConsumeOptionsBindingExchangeName(s.exchangeName), rabbitmq.WithConsumeOptionsBindingExchangeKind(s.exchangeKind), rabbitmq.WithConsumeOptionsBindingExchangeDurable, rabbitmq.WithConsumeOptionsConsumerName(s.consumerName))
 	if err != nil {

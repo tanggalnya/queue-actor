@@ -3,15 +3,15 @@ package event_triggers
 import "github.com/tanggalnya/queue-actor/internal/domain"
 
 type Factory interface {
-	NewProcessor(triggerType domain.EventTriggerType) Processor
+	NewProcessor(table domain.EventTable) Processor
 }
 
 type factory struct{}
 
-func (f factory) NewProcessor(eventTrigger domain.EventTriggerType) Processor {
-	switch eventTrigger {
-	case domain.EventTriggers.GuestBook, domain.EventTriggers.GuestAttending:
-		return newDefaultProcessor()
+func (f factory) NewProcessor(table domain.EventTable) Processor {
+	switch table {
+	case domain.EventTables.GuestBook, domain.EventTables.GuestAttending:
+		return newDefaultProcessor(table)
 	default:
 		panic("No default provider")
 	}

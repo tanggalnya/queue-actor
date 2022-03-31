@@ -1,6 +1,7 @@
 package event_triggers
 
 type Processor interface {
-	GuestBookInsert() error
-	GuestBookDelete() error
+	Insert() error
+	Delete() error
+	Update() error
 }

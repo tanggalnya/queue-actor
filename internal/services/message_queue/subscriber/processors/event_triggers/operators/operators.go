@@ -5,6 +5,7 @@ import "github.com/tanggalnya/queue-actor/internal/domain"
 var registry map[domain.EventTriggerType]Operator
 
 type Operator interface {
+	BeforeProcess() error
 	Process() error
 	AfterProcess() error
 }

@@ -2,7 +2,9 @@ package v1
 
 import (
 	"encoding/json"
+
 	"github.com/gin-gonic/gin"
+
 	"github.com/tanggalnya/queue-actor/internal/domain"
 	"github.com/tanggalnya/queue-actor/internal/events"
 	"github.com/tanggalnya/queue-actor/internal/services/message_queue/publisher"

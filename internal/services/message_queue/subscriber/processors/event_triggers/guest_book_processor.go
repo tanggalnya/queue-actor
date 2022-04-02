@@ -46,7 +46,19 @@ func (g guestBookProcessor) Update() error {
 }
 
 func (g guestBookProcessor) process(op operators.Operator) error {
-	err := op.Process()
+	var err error
+
+	err = op.BeforeProcess()
+	if err != nil {
+		return err
+	}
+
+	err = op.Process()
+	if err != nil {
+		return err
+	}
+
+	err = op.AfterProcess()
 	if err != nil {
 		return err
 	}

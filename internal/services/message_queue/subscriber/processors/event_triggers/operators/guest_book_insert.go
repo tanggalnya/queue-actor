@@ -2,6 +2,11 @@ package operators
 
 type GuestBookInsertOperator struct{}
 
+func (g GuestBookInsertOperator) BeforeProcess() error {
+	//TODO implement me
+	return nil
+}
+
 func (g GuestBookInsertOperator) Process() error {
 	//TODO implement me
 	return nil

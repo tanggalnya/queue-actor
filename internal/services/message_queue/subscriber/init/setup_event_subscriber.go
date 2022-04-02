@@ -16,11 +16,11 @@ func Initialize() *appcontext.EventSubscribers {
 		ExchangeName: "guest-book.events.topic",
 		ExchangeKind: "topic",
 		ConsumerName: "queue-actor",
-		QueueName:    domain.EventTables.GuestBook,
-		Processor:    event_triggers.NewProcessorFactory(domain.EventTables.GuestBook),
+		QueueName:    domain.EventTriggerTables.GuestBook,
+		Processor:    event_triggers.NewProcessorFactory(),
 	}
-	guestBookES := subscriber.NewEventSubscriber(cfg)
-	return &appcontext.EventSubscribers{GuestBook: guestBookES}
+	ets := subscriber.NewEventTriggersSubscriber(cfg)
+	return &appcontext.EventSubscribers{Triggers: ets}
 }
 
 func registerGuestBookOperators() {

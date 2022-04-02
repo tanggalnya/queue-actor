@@ -25,7 +25,7 @@ func main() {
 		}
 	case worker:
 		eventSubscribers := enqueues.Initialize()
-		err := eventSubscribers.GuestBook.Process()
+		err := eventSubscribers.Triggers.Process()
 		if err != nil {
 			log.Panicln("Cannot spawn worker")
 			return

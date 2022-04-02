@@ -20,7 +20,7 @@ type Config struct {
 	ExchangeName string
 	ExchangeKind string
 	ConsumerName string
-	QueueName    domain.EventTable
+	QueueName    domain.EventTriggerTable
 	Processor    event_triggers.Factory
 }
 
@@ -45,7 +45,7 @@ func (s guestBookEventSubscriber) Process() error {
 	defer consumer.StopConsuming(s.consumerName, noWait)
 
 	err = consumer.StartConsuming(func(d rabbitmq.Delivery) rabbitmq.Action {
-		event := events.GuestBookEvent{}
+		event := events.TriggersEvent{}
 		err = json.Unmarshal(d.Body, &event)
 		if err != nil {
 			log.Fatal(err)
@@ -54,7 +54,7 @@ func (s guestBookEventSubscriber) Process() error {
 		log.Printf("consumed: %v", string(d.Body))
 		// rabbitmq.Ack, rabbitmq.NackDiscard, rabbitmq.NackRequeue
 
-		pr := s.processor.NewProcessor(domain.EventTables.GuestBook)
+		pr := s.processor.NewProcessor(event.Table, event.Type)
 		switch event.Type {
 		case domain.EventTriggers.Insert:
 			err := pr.Insert()
@@ -88,7 +88,7 @@ func (s guestBookEventSubscriber) Process() error {
 	return nil
 }
 
-func NewEventSubscriber(cfg Config) EventSubscriber {
+func NewEventTriggersSubscriber(cfg Config) EventSubscriber {
 	return &guestBookEventSubscriber{
 		uri:          cfg.Uri,
 		exchangeName: cfg.ExchangeName,

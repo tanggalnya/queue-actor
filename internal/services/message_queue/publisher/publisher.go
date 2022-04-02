@@ -11,7 +11,7 @@ import (
 
 type Config struct {
 	Uri          string
-	QueueName    domain.EventTable
+	QueueName    domain.EventTriggerTable
 	Reliable     bool
 	ExchangeName string
 }

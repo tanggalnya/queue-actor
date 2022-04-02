@@ -11,13 +11,13 @@ import (
 	"github.com/tanggalnya/queue-actor/internal/services/message_queue/mocks"
 )
 
-func TestCreateGuestBookRoute(t *testing.T) {
+func TestGuestBookRoute(t *testing.T) {
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
 	mq := new(mocks.MessageQueue)
 	mq.On("PublishEvent", mock.Anything).Return(nil)
 
-	createGuestBook(c)
+	guestBook(c)
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.JSONEq(t, `{"success": "true"}`, w.Body.String())
 }

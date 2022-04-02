@@ -8,16 +8,17 @@ import (
 	"github.com/tanggalnya/queue-actor/internal/services/message_queue/publisher"
 )
 
-func createGuestBook(c *gin.Context) {
-	cfg := publisher.Config{Uri: "amqp://guest:guest@localhost", QueueName: domain.EventTables.GuestBook, ExchangeName: "guest-book.events.topic"} //TODO: change this
+func guestBook(c *gin.Context) {
+	cfg := publisher.Config{Uri: "amqp://guest:guest@localhost", QueueName: domain.EventTriggerTables.GuestBook, ExchangeName: "guest-book.events.topic"} //TODO: change this
 	publisher := publisher.NewPublishEvent(cfg)
 	attr := make(map[string]interface{})
 	attr["hello"] = "world"
-	str := events.GuestBookEvent{
+	str := events.TriggersEvent{
 		BaseEvent: events.BaseEvent{
 			Attributes: attr,
 		},
-		Type: domain.EventTriggers.Insert,
+		Type:  domain.EventTriggers.Insert,
+		Table: domain.EventTriggerTables.GuestBook,
 	}
 	v, _ := json.Marshal(str)
 	err := publisher.PublishEvent(string(v)) //TODO: change this

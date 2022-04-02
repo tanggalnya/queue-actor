@@ -12,7 +12,7 @@ import (
 
 func guestBook(c *gin.Context) {
 	cfg := publisher.Config{Uri: "amqp://guest:guest@localhost", QueueName: domain.EventTriggerTables.GuestBook, ExchangeName: "guest-book.events.topic"} //TODO: change this
-	publisher := publisher.NewPublishEvent(cfg)
+	event := publisher.NewPublishEvent(cfg)
 	attr := make(map[string]interface{})
 	attr["hello"] = "world"
 	str := events.TriggersEvent{
@@ -23,7 +23,7 @@ func guestBook(c *gin.Context) {
 		Table: domain.EventTriggerTables.GuestBook,
 	}
 	v, _ := json.Marshal(str)
-	err := publisher.PublishEvent(string(v)) //TODO: change this
+	err := event.PublishEvent(string(v)) //TODO: change this
 	if err != nil {
 		return
 	}

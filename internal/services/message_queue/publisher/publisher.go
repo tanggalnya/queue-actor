@@ -1,6 +1,7 @@
 package publisher
 
 import (
+	"github.com/tanggalnya/queue-actor/internal/domain"
 	"github.com/tanggalnya/queue-actor/internal/services/message_queue"
 	"log"
 
@@ -9,15 +10,17 @@ import (
 )
 
 type Config struct {
-	Uri       string
-	QueueName string
-	Reliable  bool
+	Uri          string
+	QueueName    domain.EventTable
+	Reliable     bool
+	ExchangeName string
 }
 
 type publisherClient struct {
-	uri       string
-	queueName string
-	reliable  bool
+	uri          string
+	queueName    string
+	reliable     bool
+	exchangeName string
 }
 
 func (p publisherClient) PublishEvent(message string) error {
@@ -25,7 +28,7 @@ func (p publisherClient) PublishEvent(message string) error {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = publisher.Publish([]byte(message), []string{"routing_key"}, rabbitmq.WithPublishOptionsContentType("application/json"), rabbitmq.WithPublishOptionsMandatory, rabbitmq.WithPublishOptionsPersistentDelivery, rabbitmq.WithPublishOptionsExchange("events"))
+	err = publisher.Publish([]byte(message), []string{"routing_key"}, rabbitmq.WithPublishOptionsContentType("application/json"), rabbitmq.WithPublishOptionsMandatory, rabbitmq.WithPublishOptionsPersistentDelivery, rabbitmq.WithPublishOptionsExchange(p.exchangeName))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,8 +44,9 @@ func (p publisherClient) PublishEvent(message string) error {
 
 func NewPublishEvent(cfg Config) message_queue.Publisher {
 	return &publisherClient{
-		uri:       cfg.Uri,
-		queueName: cfg.QueueName,
-		reliable:  cfg.Reliable,
+		uri:          cfg.Uri,
+		queueName:    string(cfg.QueueName),
+		reliable:     cfg.Reliable,
+		exchangeName: cfg.ExchangeName,
 	}
 }

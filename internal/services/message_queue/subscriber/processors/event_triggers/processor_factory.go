@@ -16,3 +16,7 @@ func (f factory) NewProcessor(table domain.EventTable) Processor {
 		panic("No default provider")
 	}
 }
+
+func NewProcessorFactory(table domain.EventTable) Factory {
+	return factory{}
+}

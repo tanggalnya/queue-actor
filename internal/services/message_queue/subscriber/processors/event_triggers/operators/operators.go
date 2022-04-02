@@ -13,6 +13,10 @@ func init() {
 	registry = make(map[domain.EventTriggerType]Operator)
 }
 
+func RegisterEventOperator(eventType domain.EventTriggerType, op Operator) {
+	registry[eventType] = op
+}
+
 func Get(eventType domain.EventTriggerType) Operator {
 	return registry[eventType]
 }

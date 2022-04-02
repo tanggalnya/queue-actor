@@ -4,12 +4,12 @@ type GuestAttendingInsertOperator struct{}
 
 func (g GuestAttendingInsertOperator) Process() error {
 	//TODO implement me
-	panic("implement me")
+	return nil
 }
 
 func (g GuestAttendingInsertOperator) AfterProcess() error {
 	//TODO implement me
-	panic("implement me")
+	return nil
 }
 
 func NewGuestAttendingInsertOperator() GuestAttendingInsertOperator {

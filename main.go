@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/tanggalnya/queue-actor/internal/handlers"
-	"github.com/tanggalnya/queue-actor/internal/services/message_queue/subscriber"
+	enqueues "github.com/tanggalnya/queue-actor/internal/services/message_queue/subscriber/init"
 )
 
 var (
@@ -24,15 +24,8 @@ func main() {
 			return
 		}
 	case worker:
-		cfg := subscriber.Config{
-			Uri:          "amqp://guest:guest@localhost",
-			ExchangeName: "events",
-			ExchangeKind: "topic",
-			ConsumerName: "gdrive",
-			QueueName:    "insert_google_drive",
-		}
-		consumer := subscriber.NewSubscribeEvent(cfg)
-		err := consumer.Consume()
+		eventSubscribers := enqueues.Initialize()
+		err := eventSubscribers.GuestBook.Process()
 		if err != nil {
 			log.Panicln("Cannot spawn worker")
 			return

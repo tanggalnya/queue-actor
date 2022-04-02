@@ -1,6 +1,7 @@
 package subscriber
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -9,7 +10,7 @@ import (
 
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/tanggalnya/queue-actor/internal/domain"
-	"github.com/tanggalnya/queue-actor/internal/services/message_queue"
+	"github.com/tanggalnya/queue-actor/internal/events"
 	"github.com/tanggalnya/queue-actor/internal/services/message_queue/subscriber/processors/event_triggers"
 	"github.com/wagslane/go-rabbitmq"
 )
@@ -19,10 +20,11 @@ type Config struct {
 	ExchangeName string
 	ExchangeKind string
 	ConsumerName string
-	QueueName    string
+	QueueName    domain.EventTable
+	Processor    event_triggers.Factory
 }
 
-type subscriberClient struct {
+type guestBookEventSubscriber struct {
 	uri          string
 	exchangeName string
 	exchangeKind string
@@ -31,7 +33,7 @@ type subscriberClient struct {
 	processor    event_triggers.Factory
 }
 
-func (s subscriberClient) Consume() error {
+func (s guestBookEventSubscriber) Process() error {
 	consumer, err := rabbitmq.NewConsumer(s.uri, amqp.Config{}, rabbitmq.WithConsumerOptionsLogging)
 	if err != nil {
 		log.Fatal(err)
@@ -43,13 +45,22 @@ func (s subscriberClient) Consume() error {
 	defer consumer.StopConsuming(s.consumerName, noWait)
 
 	err = consumer.StartConsuming(func(d rabbitmq.Delivery) rabbitmq.Action {
+		event := events.GuestBookEvent{}
+		err = json.Unmarshal(d.Body, &event)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		log.Printf("consumed: %v", string(d.Body))
 		// rabbitmq.Ack, rabbitmq.NackDiscard, rabbitmq.NackRequeue
 
-		pr := s.processor.NewProcessor(domain.EventTables.GuestBook) //TODO: change this
-		err := pr.Insert()
-		if err != nil {
-			return 0
+		pr := s.processor.NewProcessor(domain.EventTables.GuestBook)
+		switch event.Type {
+		case domain.EventTriggers.Insert:
+			err := pr.Insert()
+			if err != nil {
+				return 0
+			}
 		}
 
 		return rabbitmq.Ack
@@ -77,12 +88,13 @@ func (s subscriberClient) Consume() error {
 	return nil
 }
 
-func NewSubscribeEvent(cfg Config) message_queue.Subscriber {
-	return &subscriberClient{
+func NewEventSubscriber(cfg Config) EventSubscriber {
+	return &guestBookEventSubscriber{
 		uri:          cfg.Uri,
 		exchangeName: cfg.ExchangeName,
 		exchangeKind: cfg.ExchangeKind,
 		consumerName: cfg.ConsumerName,
-		queueName:    cfg.QueueName,
+		queueName:    string(cfg.QueueName),
+		processor:    cfg.Processor,
 	}
 }

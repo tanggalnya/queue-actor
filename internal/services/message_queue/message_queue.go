@@ -1,9 +1,5 @@
 package message_queue
 
-type Publisher interface {
+type Service interface {
 	PublishEvent(body string) error
-}
-
-type Subscriber interface {
-	Consume() error
 }

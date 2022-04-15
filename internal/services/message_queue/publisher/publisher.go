@@ -42,7 +42,7 @@ func (p publisherClient) PublishEvent(message string) error {
 	return nil
 }
 
-func NewPublishEvent(cfg Config) message_queue.Publisher {
+func NewPublishEvent(cfg Config) message_queue.Service {
 	return &publisherClient{
 		uri:          cfg.Uri,
 		queueName:    string(cfg.QueueName),

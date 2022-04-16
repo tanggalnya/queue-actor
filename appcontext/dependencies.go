@@ -1,9 +1,10 @@
 package appcontext
 
 import (
+	"google.golang.org/api/sheets/v4"
+
 	"github.com/tanggalnya/queue-actor/internal/services/message_queue/subscriber"
 	"github.com/tanggalnya/queue-actor/pkg/spreadsheet"
-	googleSheet "gopkg.in/Iwark/spreadsheet.v2"
 )
 
 type EventSubscribers struct {
@@ -11,7 +12,7 @@ type EventSubscribers struct {
 }
 
 type ExternalClients struct {
-	GoogleSheetClient googleSheet.Service
+	GoogleSheetClient sheets.Service
 }
 
 type Services struct {

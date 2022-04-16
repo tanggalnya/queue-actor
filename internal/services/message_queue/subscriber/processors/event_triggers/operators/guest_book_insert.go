@@ -2,6 +2,7 @@ package operators
 
 import (
 	"context"
+	"fmt"
 	"github.com/tanggalnya/queue-actor/pkg/spreadsheet"
 )
 
@@ -15,11 +16,9 @@ func (g GuestBookInsertOperator) BeforeProcess() error {
 }
 
 func (g GuestBookInsertOperator) Process(ctx context.Context) error {
-	// TODO
-	// Call Google Drive API for upsert folder (skip now)
-	// Call Google sheet pkg
-	// Create new sheet of guest book with row template
-	// CRUD to that sheet
+	// TODO: change this
+	ss, err := g.sc.CreateSpreadsheet(ctx)
+	fmt.Println(ss, err)
 	return nil
 }
 

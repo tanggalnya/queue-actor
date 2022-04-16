@@ -2,12 +2,13 @@ package cmd
 
 import (
 	"context"
+	"log"
+
+	"google.golang.org/api/option"
+	"google.golang.org/api/sheets/v4"
+
 	"github.com/tanggalnya/queue-actor/appcontext"
 	"github.com/tanggalnya/queue-actor/internal/config"
-	"golang.org/x/oauth2/google"
-	"gopkg.in/Iwark/spreadsheet.v2"
-	"io/ioutil"
-	"log"
 )
 
 func InitializeExternalClients() (*appcontext.ExternalClients, error) {
@@ -22,14 +23,9 @@ func checkError(err error) {
 	}
 }
 
-func googleSheetClient() *spreadsheet.Service {
+func googleSheetClient() *sheets.Service {
 	sheetCfg := config.GoogleSpreadsheetConfig()
-	data, err := ioutil.ReadFile(sheetCfg.FileSecretLocation)
+	sheetsService, err := sheets.NewService(context.Background(), option.WithCredentialsFile(sheetCfg.FileSecretLocation))
 	checkError(err)
-	conf, err := google.JWTConfigFromJSON(data, spreadsheet.Scope)
-	checkError(err)
-	client := conf.Client(context.Background())
-
-	sheetService := spreadsheet.NewServiceWithClient(client)
-	return sheetService
+	return sheetsService
 }

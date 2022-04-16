@@ -8,8 +8,8 @@ import (
 	"github.com/tanggalnya/queue-actor/internal/services/message_queue/subscriber/processors/event_triggers/operators"
 )
 
-func Initialize() *appcontext.EventSubscribers {
-	registerGuestBookOperators()
+func Initialize(svc *appcontext.Services, ec *appcontext.ExternalClients) *appcontext.EventSubscribers {
+	registerGuestBookOperators(svc)
 
 	cfg := subscriber.Config{
 		Uri:          "amqp://guest:guest@localhost",
@@ -23,6 +23,6 @@ func Initialize() *appcontext.EventSubscribers {
 	return &appcontext.EventSubscribers{Triggers: ets}
 }
 
-func registerGuestBookOperators() {
-	operators.RegisterEventOperator(domain.EventTriggers.Insert, operators.NewGuestBookInsertOperator())
+func registerGuestBookOperators(s *appcontext.Services) {
+	operators.RegisterEventOperator(domain.EventTriggers.Insert, operators.NewGuestBookInsertOperator(s.Spreadsheet))
 }

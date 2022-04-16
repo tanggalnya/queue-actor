@@ -1,6 +1,7 @@
 package event_triggers
 
 import (
+	"context"
 	"log"
 
 	"github.com/tanggalnya/queue-actor/internal/domain"
@@ -53,7 +54,7 @@ func (g guestBookProcessor) process(op operators.Operator) error {
 		return err
 	}
 
-	err = op.Process()
+	err = op.Process(context.Background())
 	if err != nil {
 		return err
 	}
@@ -69,7 +70,7 @@ func newGuestBookProcessor(trigger domain.EventTriggerType) guestBookProcessor {
 	var op operators.Operator
 	switch trigger {
 	case domain.EventTriggers.Insert:
-		op = operators.NewGuestBookInsertOperator()
+		op = operators.GuestBookInsertOperator{}
 	}
 
 	return guestBookProcessor{

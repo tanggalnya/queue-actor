@@ -1,11 +1,11 @@
 package main
 
 import (
+	"github.com/tanggalnya/queue-actor/cmd"
 	"log"
 	"os"
 
 	"github.com/tanggalnya/queue-actor/internal/handlers"
-	enqueues "github.com/tanggalnya/queue-actor/internal/services/message_queue/subscriber/init"
 )
 
 var (
@@ -20,16 +20,22 @@ func main() {
 		r := handlers.SetupRouter()
 		err := r.Run(":8085")
 		if err != nil {
-			log.Panicln("Cannot spawn server")
+			log.Panicf("Cannot spawn server, err: %v", err.Error())
 			return
 		}
 	case worker:
-		eventSubscribers := enqueues.Initialize()
-		err := eventSubscribers.Triggers.Process()
+		err := cmd.InitWorkerBase()
 		if err != nil {
-			log.Panicln("Cannot spawn worker")
+			log.Panicf("Cannot spawn worker, err: %v", err.Error())
 			return
 		}
+		wd, err := cmd.InitWorkerDependencies()
+		err = wd.EventsSubscribers.Triggers.Process()
+		if err != nil {
+			log.Panicf("Cannot spawn worker, err: %v", err.Error())
+			return
+		}
+
 	default:
 		log.Panicln("Need 1 args")
 		return

@@ -2,6 +2,7 @@ package spreadsheet
 
 import (
 	"context"
+
 	"gopkg.in/Iwark/spreadsheet.v2"
 )
 
@@ -23,6 +24,8 @@ func (s spreadSheetClient) CreateSpreadsheet(context context.Context) (spreadshe
 			Title: "spreadsheet title",
 		},
 	})
+	// TODO: update permission using google drive API
+	// https://github.com/Iwark/spreadsheet/issues/57#issuecomment-1096701536
 	return ss, err
 }
 

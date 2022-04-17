@@ -22,8 +22,14 @@ func main() {
 	arg := os.Args[1]
 	switch arg {
 	case server:
+		err := cmd.InitAppBase(currentPath)
+		if err != nil {
+			log.Panicf("Cannot spawn server, err: %v", err.Error())
+			return
+		}
+
 		r := handlers.SetupRouter()
-		err := r.Run(":8085")
+		err = r.Run(":8085")
 		if err != nil {
 			log.Panicf("Cannot spawn server, err: %v", err.Error())
 			return

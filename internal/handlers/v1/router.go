@@ -2,6 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/tanggalnya/queue-actor/internal/config"
 
 	"github.com/tanggalnya/queue-actor/internal/domain"
 	"github.com/tanggalnya/queue-actor/internal/services/message_queue/publisher"
@@ -9,7 +10,7 @@ import (
 
 func GuestBook(gb *gin.RouterGroup) {
 	cgb := gb.Group("/guest-book", gin.BasicAuth(gin.Accounts{
-		"admin": "admin123", //TODO: read from env
+		config.GuestBookConfig().Username: config.GuestBookConfig().Password,
 	}))
 
 	cfg := publisher.Config{

@@ -7,8 +7,8 @@ import (
 	"github.com/tanggalnya/queue-actor/pkg/spreadsheet"
 )
 
-func InitWorkerBase() error {
-	if err := config.LoadWorker(); err != nil {
+func InitWorkerBase(envPath string) error {
+	if err := config.LoadWorker(envPath); err != nil {
 		return err
 	}
 	return nil

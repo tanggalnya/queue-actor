@@ -19,3 +19,5 @@ out/
 
 # secret
 /credentials.json
+/app.yml
+/worker.yml

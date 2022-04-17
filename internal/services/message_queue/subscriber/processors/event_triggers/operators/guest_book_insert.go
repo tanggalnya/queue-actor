@@ -17,7 +17,8 @@ func (g GuestBookInsertOperator) BeforeProcess() error {
 
 func (g GuestBookInsertOperator) Process(ctx context.Context) error {
 	// TODO: change this
-	ss, err := g.sc.CreateSpreadsheet(ctx)
+	//ss, err := g.sc.CreateSpreadsheet(ctx)
+	ss, err := g.sc.InsertRow(ctx, "1WK7roc53yeTnZxA2neldVflbZVM7OG1Rk8kdD66CzVk", nil)
 	fmt.Println(ss, err)
 	return nil
 }

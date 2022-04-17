@@ -18,6 +18,7 @@ func LoadApp(path string) error {
 	}
 
 	initGuestBookConfig()
+	initRabbitMQConfig()
 
 	return nil
 }
@@ -38,6 +39,7 @@ func LoadWorker(path string) error {
 	}
 
 	initGoogleSpreadsheetConfig()
+	initRabbitMQConfig()
 
 	return nil
 }

@@ -1,7 +1,6 @@
 package publisher
 
 import (
-	"github.com/tanggalnya/queue-actor/internal/domain"
 	"github.com/tanggalnya/queue-actor/internal/services/message_queue"
 	"log"
 
@@ -11,7 +10,7 @@ import (
 
 type Config struct {
 	Uri          string
-	QueueName    domain.EventTriggerTable
+	QueueName    string
 	Reliable     bool
 	ExchangeName string
 }

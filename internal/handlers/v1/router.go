@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tanggalnya/queue-actor/internal/config"
 
-	"github.com/tanggalnya/queue-actor/internal/domain"
 	"github.com/tanggalnya/queue-actor/internal/services/message_queue/publisher"
 )
 
@@ -14,9 +13,9 @@ func GuestBook(gb *gin.RouterGroup) {
 	}))
 
 	cfg := publisher.Config{
-		Uri:          "amqp://guest:guest@localhost", //TODO: read from env
-		QueueName:    domain.EventTriggerTables.GuestBook,
-		ExchangeName: "guest-book.events.topic", //TODO: read from env
+		Uri:          config.RabbitMQConfig().Uri,
+		QueueName:    config.RabbitMQConfig().EventTriggersGuestBookQueueNames,
+		ExchangeName: config.RabbitMQConfig().EventTriggersExchangeName,
 	}
 	pe := publisher.NewPublishEvent(cfg)
 

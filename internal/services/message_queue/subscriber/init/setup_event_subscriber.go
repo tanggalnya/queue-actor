@@ -2,6 +2,7 @@ package init
 
 import (
 	"github.com/tanggalnya/queue-actor/appcontext"
+	"github.com/tanggalnya/queue-actor/internal/config"
 	"github.com/tanggalnya/queue-actor/internal/domain"
 	"github.com/tanggalnya/queue-actor/internal/services/message_queue/subscriber"
 	"github.com/tanggalnya/queue-actor/internal/services/message_queue/subscriber/processors/event_triggers"
@@ -12,15 +13,15 @@ func Initialize(svc *appcontext.Services, ec *appcontext.ExternalClients) *appco
 	registerGuestBookOperators(svc)
 
 	cfg := subscriber.Config{
-		Uri:          "amqp://guest:guest@localhost",
-		ExchangeName: "guest-book.events.topic",
-		ExchangeKind: "topic",
-		ConsumerName: "queue-actor",
-		QueueName:    domain.EventTriggerTables.GuestBook,
+		Uri:          config.RabbitMQConfig().Uri,
+		ExchangeName: config.RabbitMQConfig().EventTriggersExchangeName,
+		ExchangeKind: config.RabbitMQConfig().EventTriggersExchangeKind,
+		ConsumerName: config.RabbitMQConfig().ConsumerName,
+		QueueName:    config.RabbitMQConfig().EventTriggersGuestBookQueueNames,
 		Processor:    event_triggers.NewProcessorFactory(),
 	}
-	ets := subscriber.NewEventTriggersSubscriber(cfg)
-	return &appcontext.EventSubscribers{Triggers: ets}
+	gbt := subscriber.NewEventTriggersSubscriber(cfg)
+	return &appcontext.EventSubscribers{Triggers: gbt}
 }
 
 func registerGuestBookOperators(s *appcontext.Services) {

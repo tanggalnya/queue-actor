@@ -20,7 +20,7 @@ type Config struct {
 	ExchangeName string
 	ExchangeKind string
 	ConsumerName string
-	QueueName    domain.EventTriggerTable
+	QueueName    string
 	Processor    event_triggers.Factory
 }
 

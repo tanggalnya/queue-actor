@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 
+	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/option"
 	"google.golang.org/api/sheets/v4"
 
@@ -14,6 +15,7 @@ import (
 func InitializeExternalClients() (*appcontext.ExternalClients, error) {
 	return &appcontext.ExternalClients{
 		GoogleSheetClient: *googleSheetClient(),
+		GoogleDriveClient: *googleDriveClient(),
 	}, nil
 }
 
@@ -28,4 +30,11 @@ func googleSheetClient() *sheets.Service {
 	sheetsService, err := sheets.NewService(context.Background(), option.WithCredentialsFile(sheetCfg.FileSecretLocation))
 	checkError(err)
 	return sheetsService
+}
+
+func googleDriveClient() *drive.Service {
+	driveCfg := config.GoogleDriveConfig()
+	driveService, err := drive.NewService(context.Background(), option.WithCredentialsFile(driveCfg.FileSecretLocation))
+	checkError(err)
+	return driveService
 }

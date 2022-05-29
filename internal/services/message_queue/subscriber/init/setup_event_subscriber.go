@@ -25,5 +25,5 @@ func Initialize(svc *appcontext.Services, ec *appcontext.ExternalClients) *appco
 }
 
 func registerGuestBookOperators(s *appcontext.Services) {
-	operators.RegisterEventOperator(domain.EventTriggers.Insert, operators.NewGuestBookInsertOperator(s.Spreadsheet))
+	operators.RegisterEventOperator(domain.EventTriggers.Insert, operators.NewGuestBookInsertOperator(s.Spreadsheet, s.Drive))
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/tanggalnya/queue-actor/appcontext"
 	"github.com/tanggalnya/queue-actor/internal/config"
 	subscriber "github.com/tanggalnya/queue-actor/internal/services/message_queue/subscriber/init"
+	"github.com/tanggalnya/queue-actor/pkg/gdrive"
 	"github.com/tanggalnya/queue-actor/pkg/spreadsheet"
 )
 
@@ -31,8 +32,10 @@ func InitWorkerDependencies() (*appcontext.WorkerDependencies, error) {
 
 func setupWorkerServices(extClient *appcontext.ExternalClients) *appcontext.Services {
 	spreadsheetService := spreadsheet.New(extClient.GoogleSheetClient)
+	gdriveService := gdrive.New(extClient.GoogleDriveClient)
 
 	return &appcontext.Services{
 		Spreadsheet: spreadsheetService,
+		Drive:       gdriveService,
 	}
 }

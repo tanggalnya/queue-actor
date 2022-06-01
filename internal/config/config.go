@@ -39,6 +39,7 @@ func LoadWorker(path string) error {
 	}
 
 	initGoogleSpreadsheetConfig()
+	initGoogleDriveConfig()
 	initRabbitMQConfig()
 
 	return nil
